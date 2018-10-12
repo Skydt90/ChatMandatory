@@ -1,0 +1,14 @@
+CURRENT:
+
+- No currently known bugs.
+
+SOLVED:
+
+- When entering an occupied username, the user gets stuck in a loop prompting for another username, even when entering a valid one.
+- When a client is terminated w/o a QUIT message the related socket's keepAlive will keep resetting to 'true' after each iteration, rendering the heartbeat useless.
+- Clients QUIT message is broadcasted to all clients.
+- The Timers are out of sync, even with the same period as parameter resulting in active clients getting disconnected.
+- Current extraction of username may contain incorrect characters depending on host machines IP address.
+- Server is sending its list of active usernames to every client after each check on active connections, even though the list hasen't changed.
+- Receiver will throw nullPointer when quit message is sent from client to server.
+- Username will sometimes be accepted, even with incorrect input.
