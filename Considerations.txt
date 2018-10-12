@@ -1,0 +1,6 @@
+- Validation class should only return the username after validation, not the entire JOIN protocol.
+- Validation class should only validate active clients, not remove them as well. Too much responsibility.
+- Server needs some sort of thread control. After executing a thread it is sort of just 'there' in memory. Thread Pool maybe? Read documentation.
+- Chat logic should be made into a class of its own or at the very least, not be inside an infinite loop.
+- Should server have some sort of validation process for incoming protocols, eventhough they are validated client-side before being sent?
+- Feel like overall design generally needs a higher level of abstraction.
