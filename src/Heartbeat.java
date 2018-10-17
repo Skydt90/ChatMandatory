@@ -36,6 +36,3 @@ class Heartbeat extends TimerTask
         }
     }
 }
-
-
-

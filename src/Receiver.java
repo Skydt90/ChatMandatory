@@ -1,6 +1,7 @@
 import java.io.IOException;
 import java.net.Socket;
 import java.util.Arrays;
+import java.util.NoSuchElementException;
 import java.util.Scanner;
 
 /**
@@ -32,22 +33,31 @@ public class Receiver implements Runnable
         {
             ioe.printStackTrace();
         }
+
         while(!message.equals("QUIT"))                      // Keep looping until QUIT is received.
         {
-            message = input.nextLine();
-
-            if (message.startsWith("LIST"))                   // receive list of active user names.
+            try
             {
-                String usernames = message.substring(5);        // Cut off the 'LIST' part using substring.
-                String[] names = usernames.split(" ");    // Split the String into individual user names.
-                Client.usernames.clear();                      // Clear current user names from Client.
-                Client.usernames.addAll(Arrays.asList(names)); // Add new user names to Client.
+                message = input.nextLine();
+            }
+            catch (NoSuchElementException nse)               //Band aid fix
+            {
+                System.exit(1);
+            }
+
+            if (message.startsWith("LIST"))                         // receive list of active user names.
+            {
+                String usernames = message.substring(5);             // Cut off the 'LIST' part using substring.
+                String[] names = usernames.split(" ");         // Split the String into individual user names.
+                Client.usernames.clear();                           // Clear current user names from Client.
+                Client.usernames.addAll(Arrays.asList(names));      // Add new user names to Client.
+
                 // Print out the updated number of active users in chat
                 System.out.println("SERVER> There are currently: " + Client.usernames.size() + " people chatting.");
             }
             else
             {
-                System.out.println(message);    // Print chat message.
+                System.out.println(message);                        // Print chat message.
             }
         }
     }

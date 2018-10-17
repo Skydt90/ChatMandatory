@@ -1,4 +1,3 @@
-import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.*;
@@ -16,7 +15,7 @@ class Validation
     private boolean request;
 
     // Logic for validating user name on client-side
-    String validateUsername(String username, InetAddress host, int PORT)
+    String validateUsername(String username)
     {
         request = false;
         if(username.length() > 12)
@@ -28,7 +27,7 @@ class Validation
             throw new IllegalArgumentException("ERROR! Username must only contain letters and digits!");
         }
         request = true;
-        return "JOIN " + username + ", " + host.getHostAddress() + ":" + Integer.toString(PORT); // Protocol String
+        return username; // Protocol String
     }
 
     // Logic for validating chat message
@@ -63,7 +62,7 @@ class Validation
             {
                 if (username.equals(requestedUsername))     // if username exists in map.
                 {
-                    throw new IllegalArgumentException("Error! Username is already taken");
+                    throw new IllegalArgumentException("Error 401");
                 }
             }
             request = true;
@@ -93,17 +92,14 @@ class Validation
                 se.printStackTrace();
             }
         }
-        if (toRemove.size() > 0)    // Sockets added to list.
-        {
-            wasModified = true;
-        }
 
         // Remove sockets from map that matches those in the array
         for (Socket clients : toRemove)
         {
             Server.clientInfo.remove(clients);
         }
-        if (wasModified)
+
+        if (toRemove.size() > 0)    // If sockets were added to the list
         {
             Server.sendUsernames(); // Message all remaining clients the new list of active user names.
         }

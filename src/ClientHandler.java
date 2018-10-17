@@ -69,7 +69,7 @@ public class ClientHandler implements Runnable
                 }
                 catch (IllegalArgumentException iae)
                 {
-                    output.println("J_ER " + iae.getMessage() +": Something went wrong please try again");
+                    output.println("J_ER " + iae.getMessage() +": Username is already taken");
                 }
             }
 

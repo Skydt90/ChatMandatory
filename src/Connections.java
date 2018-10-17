@@ -19,7 +19,7 @@ public class Connections extends TimerTask
     @Override
     public void run()
     {
-        System.out.println("Checking active users");
+        System.out.println("Removing inactive connections...");
         validation.validateClientConnection();
         System.out.println("Server currently has: " + Server.clientInfo.size() + " active connections." );
     }

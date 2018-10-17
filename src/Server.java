@@ -16,9 +16,9 @@ import java.util.*;
 
 public class Server
 {
-    private static ServerSocket server;            // Server socket.
-    private static final int PORT = 1237;          // Server port.
-    static Map<Socket, String> clientInfo = Collections.synchronizedMap(new HashMap<>()); // Synchronized map.
+    private static ServerSocket server;                                                     // Server socket.
+    private static final int PORT = 1237;                                                   // Server port.
+    static Map<Socket, String> clientInfo = Collections.synchronizedMap(new HashMap<>());   // Synchronized map.
 
     public static void main(String[] args)
     {
@@ -41,7 +41,7 @@ public class Server
         // Starting up timer to control active connections
         Connections users = new Connections();                     // Instantiating Connection object.
         Timer isActive = new Timer();                              // Instantiating Timer object.
-        isActive.scheduleAtFixedRate(users, 0, 60000); // Scheduling timer to execute now and once per min.
+        isActive.scheduleAtFixedRate(users, 0, 30000); // Scheduling timer to execute now and once per min.
 
         while (true)
         {
