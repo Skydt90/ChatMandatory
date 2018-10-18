@@ -77,7 +77,7 @@ class Chat
 
         try
         {
-            messageToServer = new PrintWriter(client.getOutputStream(), true); // Will flush buffer each call
+            messageToServer = new PrintWriter(client.getOutputStream(), true);               // Will flush buffer each call
         }
         catch(IOException ioe)
         {
@@ -89,11 +89,11 @@ class Chat
             message = input.nextLine();
             try
             {
-                message = validation.validateChatMessage(message); // Attempts to validate input using Validation class.
+                message = validation.validateChatMessage(message);                                    // Attempts to validate input using Validation class.
             }
             catch (IllegalArgumentException iae)
             {
-                System.err.println(iae.getMessage());              // Error message informing of any incorrect input.
+                System.err.println(iae.getMessage());                                                 // Error message informing of any incorrect input.
             }
         }
         while (!validation.getRequest());
@@ -101,12 +101,12 @@ class Chat
         // Shutdown logic
         if (message.equals("QUIT"))
         {
-            messageToServer.println("QUIT");                       // QUIT message to server.
+            chatRead.interrupt();                                                                      // Shut down receiver thread.
+            messageToServer.println("QUIT");                                                           // QUIT message to server.
             System.out.println("Shutting down.");
-            chatRead.interrupt();                                  // Shut down receiver thread.
             isRunning = false;
         }
-        messageToServer.println("DATA " + username + ": " + message); // Chat message to server.
+        messageToServer.println("DATA " + username + ": " + message);                                  // Chat message to server.
     }
 
     boolean getIsRunning()

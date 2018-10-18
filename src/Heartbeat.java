@@ -28,7 +28,7 @@ class Heartbeat extends TimerTask
         try
         {
             messageToServer = new PrintWriter(socket.getOutputStream(), true); // will flush buffer each call.
-            messageToServer.println("IMAV");                        // Protocol message to indicate activity to server.
+            messageToServer.println("IMAV");                                            // Protocol message to indicate activity to server.
         }
         catch (IOException ioe)
         {

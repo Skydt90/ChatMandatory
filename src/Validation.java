@@ -27,7 +27,7 @@ class Validation
             throw new IllegalArgumentException("ERROR! Username must only contain letters and digits!");
         }
         request = true;
-        return username; // Protocol String
+        return username;
     }
 
     // Logic for validating chat message
@@ -47,45 +47,39 @@ class Validation
     }
 
     // Logic for validating user name on server-side
-    boolean validateUsernameOnServer(String requestedUsername, Socket clientSocket)
+    boolean validateUsernameOnServer(String requestedUsername)
     {
-        // Add client if map is empty
-        if (Server.clientInfo.isEmpty())
+        if (Server.clientInfo.isEmpty())                            // If map is empty.
         {
-            request = true;
-            Server.clientInfo.put(clientSocket, requestedUsername); // Store client socket as key and username as value.
-            return request;
+            return request = true;
         }
-        else    // If map is not empty.
+        else                                                        // If map is not empty.
         {
             for(String username : Server.clientInfo.values())
             {
-                if (username.equals(requestedUsername))     // if username exists in map.
+                if (username.equals(requestedUsername))              // if username exists in map.
                 {
                     throw new IllegalArgumentException("Error 401");
                 }
             }
-            request = true;
-            Server.clientInfo.put(clientSocket, requestedUsername); // Store socket and username in map if passed.
         }
-        return request;
+        return request = true;
     }
 
     // Logic for validating active clients on the server
     void validateClientConnection()
     {
-        List<Socket> toRemove = new ArrayList<>();  // Temp storage array to avoid ConcurrentModException.
-        boolean wasModified = false;                // Bool to trigger Server.sendUsernames if map is modified.
+        List<Socket> toRemove = new ArrayList<>();              // Temp storage array to avoid ConcurrentModException.
 
         for(Socket client : Server.clientInfo.keySet())
         {
             try
             {
-                if (!client.getKeepAlive())  // If false.
+                if (!client.getKeepAlive())                     // If false.
                 {
-                    toRemove.add(client);    // Add to array.
+                    toRemove.add(client);                       // Add to array.
                 }
-                client.setKeepAlive(false);  // Set to false.
+                client.setKeepAlive(false);                     // Set to false.
             }
             catch(SocketException se)
             {
@@ -99,9 +93,9 @@ class Validation
             Server.clientInfo.remove(clients);
         }
 
-        if (toRemove.size() > 0)    // If sockets were added to the list
+        if (toRemove.size() > 0)                                // If sockets were added to the list
         {
-            Server.sendUsernames(); // Message all remaining clients the new list of active user names.
+            Server.sendUsernames();                             // Message all remaining clients the new list of active user names.
         }
     }
 

@@ -17,22 +17,22 @@ import java.util.Timer;
 
 public class Client
 {
-    private static InetAddress host;                            // Server IP address.
-    private static final int PORT = 1237;                       // Server Port.
-    static List<String> usernames = new ArrayList<>();          // A list of all active users on the server.
+    private static InetAddress host;                                            // Server IP address.
+    private static final int PORT = 1237;                                       // Server Port.
+    static List<String> usernames = new ArrayList<>();                          // A list of all active users on the server.
 
     public static void main(String[] args)
     {
         try
         {
-            host = InetAddress.getLocalHost();                  // Getting server IP address.
+            host = InetAddress.getLocalHost();                                  // Getting server IP address.
         }
         catch(UnknownHostException uhe)
         {
             uhe.printStackTrace();
             System.exit(1);
         }
-        accessServer();                                         // Initiating server access.
+        accessServer();                                                         // Initiating server access.
     }
 
     // Method containing all logic for accessing the server
@@ -46,28 +46,28 @@ public class Client
 
         try
         {
-            socket = new Socket(host, PORT);                        // Instantiating a new socket using above variables.
+            socket = new Socket(host, PORT);                                    // Instantiating a new socket using above variables.
             chat = new Chat(socket, host, PORT);
 
             System.out.print("Welcome to the chat. Please enter desired username:\n");
             // Loops until a valid username is entered
             do
             {
-                username = chat.enterUsername();                    // Initiates method for creating a username.
-                tryUsername = chat.tryNameOnServer();               // Sends desired username to the server.
+                username = chat.enterUsername();                                // Initiates method for creating a username.
+                tryUsername = chat.tryNameOnServer();                           // Sends desired username to the server.
 
                 if (tryUsername.startsWith("J_ER"))
                 {
                     String response = tryUsername.substring(5);
-                    System.err.println(response);                   // Error response, if username is already taken.
+                    System.err.println(response);                               // Error response, if username is already taken.
                 }
             }
             while (!tryUsername.startsWith("J_OK"));
 
             // Starting up heartbeat timer
-            Heartbeat beat = new Heartbeat(socket);                  // Instantiating the Heartbeat object.
-            Timer imAlive = new Timer();                             // Instantiating the Timer object.
-            imAlive.scheduleAtFixedRate(beat, 0, 30000); // Scheduling timer to execute now and once per min.
+            Heartbeat beat = new Heartbeat(socket);                             // Instantiating the Heartbeat object.
+            Timer imAlive = new Timer();                                        // Instantiating the Timer object.
+            imAlive.scheduleAtFixedRate(beat, 0, 30000);            // Scheduling timer to execute now and once per min.
 
             // Starting up the chat service
             System.out.println("You connected as: " + "'" + username + "'" + "\nType in 'QUIT' if you wish to leave.");

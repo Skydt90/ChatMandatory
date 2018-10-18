@@ -16,15 +16,15 @@ import java.util.*;
 
 public class Server
 {
-    private static ServerSocket server;                                                     // Server socket.
-    private static final int PORT = 1237;                                                   // Server port.
-    static Map<Socket, String> clientInfo = Collections.synchronizedMap(new HashMap<>());   // Synchronized map.
+    private static ServerSocket server;                                                         // Server socket.
+    private static final int PORT = 1237;                                                       // Server port.
+    static Map<Socket, String> clientInfo = Collections.synchronizedMap(new HashMap<>());       // Synchronized map.
 
     public static void main(String[] args)
     {
         try
         {
-            server = new ServerSocket(PORT);                    // Instantiating serverSocket with above port number.
+            server = new ServerSocket(PORT);                                                    // Instantiating serverSocket with above port number.
             System.out.println("Server initialized!");
         }
         catch (IOException ioe)
@@ -32,22 +32,22 @@ public class Server
             System.out.println("Unable to setup port");
             System.exit(1);
         }
-        serverRun();                                            // Initiating server logic.
+        serverRun();                                                                            // Initiating server logic.
     }
 
     // Method containing servers run logic
     private static void serverRun()
     {
         // Starting up timer to control active connections
-        Connections users = new Connections();                     // Instantiating Connection object.
-        Timer isActive = new Timer();                              // Instantiating Timer object.
-        isActive.scheduleAtFixedRate(users, 0, 30000); // Scheduling timer to execute now and once per min.
+        Connections users = new Connections();                                                  // Instantiating Connection object.
+        Timer isActive = new Timer();                                                           // Instantiating Timer object.
+        isActive.scheduleAtFixedRate(users, 0, 30000);                              // Scheduling timer to execute now and once per min.
 
         while (true)
         {
             try
             {
-                Socket clientSocket = server.accept();             // 'Listens' for incoming connection.
+                Socket clientSocket = server.accept();                                          // 'Listens' for incoming connection.
                 System.out.println(clientSocket.getInetAddress().getHostName() + " connected");
 
                 // Starting up new thread for handling the new client
@@ -65,10 +65,10 @@ public class Server
     static void sendUsernames()
     {
         PrintWriter output;
-        ArrayList<String> usernames = new ArrayList<>(Server.clientInfo.values()); // Adding all user names to ArrayList.
+        ArrayList<String> usernames = new ArrayList<>(Server.clientInfo.values());              // Adding all user names to ArrayList.
 
-        String names = "LIST ";                               // Start of LIST protocol.
-        for (String name : usernames)                         // Concatenates user names into String.
+        String names = "LIST ";                                                                 // Start of LIST protocol.
+        for (String name : usernames)                                                           // Concatenates user names into String.
         {
             names += name + " ";
         }

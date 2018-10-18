@@ -47,24 +47,25 @@ public class ClientHandler implements Runnable
         {
             try
             {
-                messageFromClient = input.nextLine();       // Wait for client input.
+                messageFromClient = input.nextLine();                   // Wait for client input.
             }
             catch(NoSuchElementException nse)
             {
-                running = false;                            // break loop if exception is thrown, to terminate.
+                running = false;                                        // break loop if exception is thrown, to terminate.
             }
 
             // Logic for joining a client
-            if (messageFromClient.startsWith("JOIN"))               // JOIN protocol.
+            if (messageFromClient.startsWith("JOIN"))                   // JOIN protocol from client.
             {
                 int index = messageFromClient.indexOf(",");
-                username = messageFromClient.substring(5, index);   // Extract user name from JOIN using substring.
+                username = messageFromClient.substring(5, index);       // Extract user name from JOIN using substring.
                 try
                 {
-                    if (validation.validateUsernameOnServer(username, clientSocket))  // If user name is ok.
+                    if (validation.validateUsernameOnServer(username))  // If user name is ok.
                     {
-                        output.println("J_OK");             // J_OK protocol.
-                        Server.sendUsernames();             // Send out updated list of user names to clients.
+                        Server.clientInfo.put(clientSocket, username);  // Add clientSocket and username to server map.
+                        output.println("J_OK");                         // J_OK protocol to client.
+                        Server.sendUsernames();                         // Send out updated list of user names to clients.
                     }
                 }
                 catch (IllegalArgumentException iae)
@@ -74,16 +75,15 @@ public class ClientHandler implements Runnable
             }
 
             // Logic for terminating a client
-            if (messageFromClient.startsWith("QUIT"))         // QUIT protocol.
+            if (messageFromClient.startsWith("QUIT"))                   // QUIT protocol.
             {
                 try
                 {
                     System.out.println("Closing Connection...");
-                    output.println("QUIT");
-                    clientSocket.close();                       // Close the socket.
+                    clientSocket.close();                               // Close the socket.
                     System.out.println("Connection Closed");
-                    Server.clientInfo.remove(clientSocket);     // Remove socket from map.
-                    Server.sendUsernames();                     // Send out updated list of user names to clients.
+                    Server.clientInfo.remove(clientSocket);             // Remove socket from map.
+                    Server.sendUsernames();                             // Send out updated list of user names to clients.
                     running = false;
                 }
                 catch (IOException ioe)
@@ -94,11 +94,11 @@ public class ClientHandler implements Runnable
             }
 
             // Logic for keeping a client alive
-            if(messageFromClient.startsWith("IMAV"))        // IMAV protocol.
+            if(messageFromClient.startsWith("IMAV"))                    // IMAV protocol.
             {
                 try
                 {
-                    clientSocket.setKeepAlive(true);        // Client is active, so set true.
+                    clientSocket.setKeepAlive(true);                    // Client is active, so set true.
                 }
                 catch (SocketException se)
                 {
@@ -107,7 +107,7 @@ public class ClientHandler implements Runnable
             }
 
             // Trigger for broadcasting
-            else if (messageFromClient.startsWith("DATA"))  // DATA protocol.
+            else if (messageFromClient.startsWith("DATA"))              // DATA protocol.
             {
                 broadcast();
             }
@@ -119,12 +119,10 @@ public class ClientHandler implements Runnable
     {
         try
         {
-            int index;
-            index = messageFromClient.indexOf(":");             // Start index of message to be broadcast.
             for (Socket client: Server.clientInfo.keySet())
             {
                 output = new PrintWriter(client.getOutputStream(),true);
-                output.println(username + ":" + messageFromClient.substring(index + 1)); // Extract the message & send.
+                output.println(messageFromClient.substring(5));         // Extract the message & send.
             }
         }
         catch(IOException ioe)
