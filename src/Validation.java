@@ -1,3 +1,4 @@
+import java.io.IOException;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.*;
@@ -90,7 +91,15 @@ class Validation
         // Remove sockets from map that matches those in the array
         for (Socket clients : toRemove)
         {
-            Server.clientInfo.remove(clients);
+            try
+            {
+                clients.close();
+                Server.clientInfo.remove(clients);
+            }
+            catch (IOException ioe)
+            {
+                ioe.printStackTrace();
+            }
         }
 
         if (toRemove.size() > 0)                                // If sockets were added to the list
